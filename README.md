@@ -1,24 +1,50 @@
-# README
+# Notes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Creating basic rails API app
 
-Things you may want to cover:
+```
+$ rails new bookshelf --api
+$ cd bookshelf
+$ rails g scaffold Book title isbn author price:integer
+```
 
-* Ruby version
+In the routes.rb  
 
-* System dependencies
+```ruby
+resources :books, defaults: {format: :json}
+```
+Populate the database using the seed file
 
-* Configuration
+```
+$ rails db:migrate
+$ rails db:seed
+```
 
-* Database creation
+In the gem file 
 
-* Database initialization
+un-comment the corse gem 
+```ruby
+gem 'rack-cors'
+```
 
-* How to run the test suite
+```
+$ bundle
+```
+Re-start server
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+In config/initializers/cors 
 
-* ...
+un-comment the method and add the correct localhost
+```ruby
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins 'localhost:5500'
+
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
+end
+```
+
